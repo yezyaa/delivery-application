@@ -1,2 +1,2 @@
 # delivery-application
-![image](https://github.com/yezyaa/delivery-application/assets/82196217/5dcf2bba-ed08-45df-8412-f485aac50f54)
+![delivery-application_ver1](https://github.com/yezyaa/delivery-application/assets/82196217/012b48b9-96d7-46d4-9683-90a288024f88)
