@@ -1,28 +1,24 @@
 package com.example.deliveryapplication.menus;
 
-import com.example.deliveryapplication.stores.Stores;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Data
+@Entity
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "menus")
-public class Menus {
+public class MenusEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
     private String name;
-    private double price;
+    private int price;
     private String description;
 
     @Column(name = "created_at")
