@@ -1,52 +1,53 @@
 package com.example.deliveryapplication.menus;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
+@RequiredArgsConstructor
 @RestController
+@RequestMapping("/menus")
 public class MenusController {
-    private MenusService menusService;
-
-    @Autowired
-    public MenusController(MenusService menusService) {
-        this.menusService = menusService;
-    }
+    private final MenusService menusService;
 
     // 메뉴 등록
-    @PostMapping("/menus")
-    public void saveMenuItem(@RequestBody Menus menu) {
-        System.out.println("POST");
-        menusService.saveMenu(menu);
-    }
-
-    // 메뉴 단일 조회
-    @GetMapping("/menus/{id}")
-    public Menus findMenu(@PathVariable("id") int id) {
-        System.out.println("GET");
-        System.out.println(id);
-        return menusService.findMenu(id);
+    @PostMapping
+    public void saveMenu(@RequestBody MenusDto dto) {
+        log.info("POST");
+        menusService.saveMenu(dto);
     }
 
     // 메뉴 전체 조회
-    @GetMapping("/menus")
-    public List<Menus> findMenuItems() {
-        System.out.println("GET");
+    @GetMapping
+    public List<MenusDto> findMenus() {
+        log.info("GET All");
         return menusService.findMenus();
     }
 
+    // 메뉴 단일 조회
+    @GetMapping("/{id}")
+    public MenusDto findMenu(@PathVariable("id") int id) {
+        log.info("GET Id = " + id);
+        return menusService.findMenu(id);
+    }
+
     // 메뉴 수정
-    @PutMapping("/menus/{id}")
-    public void updateMenu(@PathVariable("id") int id, @RequestBody Menus menu) {
-        System.out.println("UPDATE");
-        menusService.updateMenu(id, menu);
+    @PutMapping("/{id}")
+    public MenusDto updateMenu(
+            @PathVariable("id") int id,
+            @RequestBody MenusDto dto
+    ) {
+        log.info("UPDATE Id = " + id);
+        return menusService.updateMenu(id, dto);
     }
 
     // 메뉴 삭제
-    @DeleteMapping("/menus/{id}")
+    @DeleteMapping("/{id}")
     public void deleteMenu(@PathVariable("id") int id) {
-        System.out.println("DELETE");
+        log.info("DELETE Id = " + id);
         menusService.deleteMenu(id);
     }
 }
