@@ -23,8 +23,7 @@ public class StoresDto {
     private LocalDateTime createdAt;            // 생성일시
     private LocalDateTime updatedAt;            // 수정일시
     
-    private List<ClosedDaysDto> closedDaysList; // 휴무일
-    private List<MenusDto> menusList;           // 메뉴
+    private List<String> closedDaysList;        // 휴무일
 
     public static StoresDto fromEntity(StoresEntity entity) {
         StoresDto dto = new StoresDto();

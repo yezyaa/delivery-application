@@ -52,10 +52,4 @@ public class StoresEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "store")
-    private List<ClosedDaysEntity> closedDays = new ArrayList<>();
-
-    @OneToMany(mappedBy = "store")
-    private List<MenusEntity> menus = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.example.deliveryapplication.stores;
 
+import com.example.deliveryapplication.closedDays.ClosedDaysService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 public class StoresService {
     private final SpringDataJPAStoresRepository springDataJPAStoresRepository;
+    private final ClosedDaysService closedDaysService;
 
     // 식당 등록
     public void saveStore(StoresDto dto) {
@@ -47,7 +49,10 @@ public class StoresService {
         Optional<StoresEntity> optionalStoresEntity = springDataJPAStoresRepository.findById(id);
         if (optionalStoresEntity.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "식당을 찾을 수 없습니다.");
-        return StoresDto.fromEntity(optionalStoresEntity.get());
+
+        StoresDto storesDto = StoresDto.fromEntity(optionalStoresEntity.get());
+        storesDto.setClosedDaysList(closedDaysService.findDaysOfClosedDaysByStoreId(id));
+        return storesDto;
     }
 
     // 식당 수정
