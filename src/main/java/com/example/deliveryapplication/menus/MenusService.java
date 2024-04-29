@@ -1,5 +1,7 @@
 package com.example.deliveryapplication.menus;
 
+import com.example.deliveryapplication.stores.SpringDataJPAStoresRepository;
+import com.example.deliveryapplication.stores.StoresEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,24 +17,29 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MenusService {
-    private final SpringDataJPAMenusRepository springDataJPAMenusRepository;
+    private final SpringDataJPAStoresRepository storesRepository;
+    private final SpringDataJPAMenusRepository menusRepository;
 
     // 메뉴 등록
-    public void saveMenu(MenusDto dto) {
+    public void saveMenu(int storeId, MenusDto dto) {
+        StoresEntity storesEntity = storesRepository.findById(storeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "메뉴를 등록할 식당이 없습니다."));
+
         MenusEntity newMenus = MenusEntity.builder()
+                .store(storesEntity)
                 .name(dto.getName())
                 .price(dto.getPrice())
                 .description(dto.getDescription())
                 .createdAt(LocalDateTime.now())
                 .status(dto.getStatus())
                 .build();
-        springDataJPAMenusRepository.save(newMenus);
+        menusRepository.save(newMenus);
     }
 
     // 메뉴 전체 조회
     public List<MenusDto> findMenus() {
         List<MenusDto> menusDtoList = new ArrayList<>();
-        for (MenusEntity menusEntity : springDataJPAMenusRepository.findAll()) {
+        for (MenusEntity menusEntity : menusRepository.findAll()) {
             menusDtoList.add(MenusDto.fromEntity(menusEntity));
         }
         return menusDtoList;
@@ -40,7 +47,7 @@ public class MenusService {
 
     // 메뉴 단일 조회
     public MenusDto findMenu(int id) {
-        Optional<MenusEntity> optionalMenusEntity = springDataJPAMenusRepository.findById(id);
+        Optional<MenusEntity> optionalMenusEntity = menusRepository.findById(id);
         if (optionalMenusEntity.isPresent())
             return MenusDto.fromEntity(optionalMenusEntity.get());
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -48,7 +55,7 @@ public class MenusService {
 
     // 메뉴 수정
     public MenusDto updateMenu(int id, MenusDto dto) {
-        Optional<MenusEntity> optionalMenusEntity = springDataJPAMenusRepository.findById(id);
+        Optional<MenusEntity> optionalMenusEntity = menusRepository.findById(id);
         if (optionalMenusEntity.isPresent()) {
             MenusEntity menusEntity = optionalMenusEntity.get();
             menusEntity.setName(dto.getName());
@@ -56,14 +63,14 @@ public class MenusService {
             menusEntity.setDescription(dto.getDescription());
             menusEntity.setUpdatedAt(LocalDateTime.now());
             menusEntity.setStatus(dto.getStatus());
-            return MenusDto.fromEntity(springDataJPAMenusRepository.save(menusEntity));
+            return MenusDto.fromEntity(menusRepository.save(menusEntity));
         } else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     // 메뉴 삭제
     public void deleteMenu(int id) {
-        if (springDataJPAMenusRepository.existsById(id))
-            springDataJPAMenusRepository.deleteById(id);
+        if (menusRepository.existsById(id))
+            menusRepository.deleteById(id);
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

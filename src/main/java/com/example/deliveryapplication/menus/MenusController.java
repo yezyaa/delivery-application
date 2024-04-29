@@ -9,15 +9,18 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/menus")
+@RequestMapping("stores/{storeId}/menus")
 public class MenusController {
     private final MenusService menusService;
 
     // 메뉴 등록
     @PostMapping
-    public void saveMenu(@RequestBody MenusDto dto) {
+    public void saveMenu(
+            @PathVariable("storeId") int storeId,
+            @RequestBody MenusDto dto
+    ) {
         log.info("POST");
-        menusService.saveMenu(dto);
+        menusService.saveMenu(storeId, dto);
     }
 
     // 메뉴 전체 조회

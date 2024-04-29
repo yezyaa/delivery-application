@@ -54,7 +54,7 @@ public class ClosedDaysController {
             @PathVariable("storeId") int storeId,
             @PathVariable("id") int id
     ) {
-        log.info("Delete Store id = " + storeId);
-        closedDaysService.deleteClosedDayByStoreId(storeId, id);
+        log.info("Delete Id = " + id);
+        closedDaysService.deleteClosedDayByStoreId(id);
     }
 }
