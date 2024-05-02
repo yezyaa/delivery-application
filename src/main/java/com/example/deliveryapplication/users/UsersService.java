@@ -1,5 +1,7 @@
 package com.example.deliveryapplication.users;
 
+import com.example.deliveryapplication.userAddress.UserAddressDto;
+import com.example.deliveryapplication.userAddress.UserAddressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 public class UsersService {
     private final SpringDataJPAUsersRepository usersRepository;
+    private final UserAddressService userAddressService;
 
     // 회원가입
     public void saveUser(UsersRegistrationDto dto) {
@@ -46,7 +49,9 @@ public class UsersService {
         if (optionalUsersEntity.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        return UsersDto.fromEntity(optionalUsersEntity.get());
+        UsersDto usersDto = UsersDto.fromEntity(optionalUsersEntity.get());
+        usersDto.setUserAddressList(userAddressService.findUserAddressesByUserId(id));
+        return usersDto;
     }
 
     // 사용자 본인 정보 조회

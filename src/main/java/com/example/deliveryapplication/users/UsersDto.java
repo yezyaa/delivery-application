@@ -1,9 +1,11 @@
 package com.example.deliveryapplication.users;
 
+import com.example.deliveryapplication.userAddress.UserAddressDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,10 +16,12 @@ public class UsersDto {
     private String email;                   // 이메일
     private String phoneNumber;             // 전화번호
     private String password;                // 비밀번호
-    private String role;                    // 권한(회원/사장/관리자)
+    private String role;                    // 권한(고객/사장/관리자)
     private LocalDateTime createdAt;        // 생성일시
     private LocalDateTime updatedAt;        // 수정일시
     private String status;                  // 상태(일반/탈퇴/휴먼/블랙리스트)
+
+    private List<UserAddressDto> userAddressList;      // 회원주소목록
 
     public static UsersDto fromEntity(UsersEntity entity) {
         UsersDto dto = new UsersDto();

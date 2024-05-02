@@ -19,13 +19,13 @@ public class UsersController {
     }
 
     // 사용자 본인 정보 조회
-    @GetMapping("/my-profile/{id}")
+    @GetMapping("/{id}/my-profile")
     public UsersProfileDto findMyProfile(@PathVariable("id") int id) {
         return usersService.findMyProfile(id);
     }
 
     // 사용자 본인 닉네임 수정
-    @PatchMapping("/nickname/{id}")
+    @PatchMapping("/{id}/nickname")
     public UsersProfileDto updateNickname(
             @PathVariable("id") int id,
             @RequestBody UsersProfileDto dto
@@ -35,7 +35,7 @@ public class UsersController {
     }
     
     // 사용자 본인 이메일
-    @PatchMapping("/email/{id}")
+    @PatchMapping("/{id}/email")
     public UsersProfileDto updateEmail(
             @PathVariable("id") int id,
             @RequestBody UsersProfileDto dto
@@ -45,7 +45,7 @@ public class UsersController {
     }
     
     // 사용자 본인 전화번호 수정
-    @PatchMapping("/phone-number/{id}")
+    @PatchMapping("/{id}/phone-number")
     public UsersProfileDto updatePhoneNumber(
             @PathVariable("id") int id,
             @RequestBody UsersProfileDto dto
@@ -55,7 +55,7 @@ public class UsersController {
     }
     
     // 사용자 본인 비밀번호 수정
-    @PutMapping("/password/{id}")
+    @PutMapping("/{id}/password")
     public UsersPasswordDto updatePassword(
             @PathVariable("id") int id,
             @RequestBody UsersPasswordDto dto
