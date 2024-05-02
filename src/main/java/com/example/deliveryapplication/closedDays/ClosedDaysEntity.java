@@ -16,9 +16,10 @@ public class ClosedDaysEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String day;
-
     @ManyToOne
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id", nullable = false)
     private StoresEntity store;
+
+    @Column(length = 10, nullable = false)
+    private String day;
 }
