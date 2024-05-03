@@ -50,9 +50,7 @@ public class StoresService {
         if (optionalStoresEntity.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "식당을 찾을 수 없습니다.");
 
-        StoresDto storesDto = StoresDto.fromEntity(optionalStoresEntity.get());
-        storesDto.setClosedDaysList(closedDaysService.findDaysOfClosedDaysByStoreId(id));
-        return storesDto;
+        return StoresDto.fromEntity(optionalStoresEntity.get());
     }
 
     // 식당 수정

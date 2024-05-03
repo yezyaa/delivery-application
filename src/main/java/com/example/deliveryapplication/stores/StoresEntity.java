@@ -2,6 +2,7 @@ package com.example.deliveryapplication.stores;
 
 import com.example.deliveryapplication.closedDays.ClosedDaysEntity;
 import com.example.deliveryapplication.menus.MenusEntity;
+import com.example.deliveryapplication.userAddress.UserAddressEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Service;
@@ -52,4 +53,7 @@ public class StoresEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<ClosedDaysEntity> closedDays = new ArrayList<>();
 }
