@@ -1,6 +1,6 @@
 package com.example.deliveryapplication.users;
 
-import com.example.deliveryapplication.userAddress.UserAddressDto;
+import com.example.deliveryapplication.userAddress.UserAddressInfoDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +21,7 @@ public class UsersDto {
     private LocalDateTime updatedAt;        // 수정일시
     private String status;                  // 상태(일반/탈퇴/휴먼/블랙리스트)
 
-    private List<UserAddressDto> userAddressList;      // 회원주소목록
+    private List<UserAddressInfoDto> userAddressList;      // 회원주소목록
 
     public static UsersDto fromEntity(UsersEntity entity) {
         UsersDto dto = new UsersDto();

@@ -43,8 +43,17 @@ public class UserAddressService {
         return userAddressDtoList;
     }
 
+    // 사용자별 주소지 및 주소 필드만 전체 조회
+    public List<UserAddressInfoDto> findUserAddressInfoByUserId(int userId) {
+        List<UserAddressInfoDto> userAddressInfoDtoList = new ArrayList<>();
+        for (UserAddressEntity userAddressEntity : userAddressRepository.findByUserId(userId)) {
+            userAddressInfoDtoList.add(UserAddressInfoDto.returnAddressInfo(userAddressEntity));
+        }
+        return userAddressInfoDtoList;
+    }
+
     // 사용자별 주소지명 수정
-    public UserAddressDto updateUserAddressNameByUserId(int userId, int id, UserAddressDto dto) {
+    public UserAddressDto updateUserAddressNameByUserId(int userId, int id, UserAddressInfoDto dto) {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
@@ -58,7 +67,7 @@ public class UserAddressService {
     }
 
     // 사용자별 주소 수정
-    public UserAddressDto updateUserAddressByUserId(int userId, int id, UserAddressDto dto) {
+    public UserAddressDto updateUserAddressByUserId(int userId, int id, UserAddressInfoDto dto) {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 

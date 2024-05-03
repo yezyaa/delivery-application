@@ -1,6 +1,5 @@
 package com.example.deliveryapplication.users;
 
-import com.example.deliveryapplication.userAddress.UserAddressDto;
 import com.example.deliveryapplication.userAddress.UserAddressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +49,7 @@ public class UsersService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
         UsersDto usersDto = UsersDto.fromEntity(optionalUsersEntity.get());
-        usersDto.setUserAddressList(userAddressService.findUserAddressesByUserId(id));
+        usersDto.setUserAddressList(userAddressService.findUserAddressInfoByUserId(id));
         return usersDto;
     }
 
