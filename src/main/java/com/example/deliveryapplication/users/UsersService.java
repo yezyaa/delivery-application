@@ -1,6 +1,7 @@
 package com.example.deliveryapplication.users;
 
 import com.example.deliveryapplication.userAddress.UserAddressService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ public class UsersService {
     }
 
     // 사용자 전체 조회 (관리자)
+    @Transactional
     public List<UsersDto> findUsers() {
         List<UsersDto> userDtoList = new ArrayList<>();
         for (UsersEntity usersEntity : usersRepository.findAll()) {
@@ -43,14 +45,13 @@ public class UsersService {
     }
 
     // 사용자 단일 조회 (관리자)
+    @Transactional
     public UsersDto findUser(int id) {
         Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
         if (optionalUsersEntity.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        UsersDto usersDto = UsersDto.fromEntity(optionalUsersEntity.get());
-        usersDto.setUserAddressList(userAddressService.findUserAddressInfoByUserId(id));
-        return usersDto;
+        return UsersDto.fromEntity(optionalUsersEntity.get());
     }
 
     // 사용자 본인 정보 조회

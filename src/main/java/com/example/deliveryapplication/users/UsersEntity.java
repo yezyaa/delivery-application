@@ -1,9 +1,12 @@
 package com.example.deliveryapplication.users;
 
+import com.example.deliveryapplication.userAddress.UserAddressEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,4 +47,7 @@ public class UsersEntity {
     @Builder.Default
     @Column(length = 10)
     private String status = "일반";
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<UserAddressEntity> userAddresses = new ArrayList<>();
 }
