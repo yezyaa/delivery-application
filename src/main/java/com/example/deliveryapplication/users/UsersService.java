@@ -1,5 +1,7 @@
 package com.example.deliveryapplication.users;
 
+import com.example.deliveryapplication.userAddress.UserAddressService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 public class UsersService {
     private final SpringDataJPAUsersRepository usersRepository;
+    private final UserAddressService userAddressService;
 
     // 회원가입
     public void saveUser(UsersRegistrationDto dto) {
@@ -32,6 +35,7 @@ public class UsersService {
     }
 
     // 사용자 전체 조회 (관리자)
+    @Transactional
     public List<UsersDto> findUsers() {
         List<UsersDto> userDtoList = new ArrayList<>();
         for (UsersEntity usersEntity : usersRepository.findAll()) {
@@ -41,6 +45,7 @@ public class UsersService {
     }
 
     // 사용자 단일 조회 (관리자)
+    @Transactional
     public UsersDto findUser(int id) {
         Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
         if (optionalUsersEntity.isEmpty())
