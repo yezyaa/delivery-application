@@ -2,6 +2,8 @@ package com.example.deliveryapplication.stores;
 
 import com.example.deliveryapplication.closedDays.ClosedDaysEntity;
 import com.example.deliveryapplication.menus.MenusEntity;
+import com.example.deliveryapplication.userAddress.UserAddressEntity;
+import com.example.deliveryapplication.users.UsersEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,10 @@ public class StoresEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UsersEntity user;
 
     @Column(length = 50, nullable = false)
     private String name;
@@ -52,4 +58,7 @@ public class StoresEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<ClosedDaysEntity> closedDays = new ArrayList<>();
 }

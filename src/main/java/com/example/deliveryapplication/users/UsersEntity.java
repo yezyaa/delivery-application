@@ -32,7 +32,7 @@ public class UsersEntity {
     @Column(name = "phone_number", length = 11, nullable = false)
     private String phoneNumber;
 
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Column(length = 10, nullable = false)
