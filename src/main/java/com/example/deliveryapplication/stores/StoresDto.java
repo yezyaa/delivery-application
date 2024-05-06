@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 public class StoresDto {
     private int id;
+    private int userId;                         // 사장ID
     private String name;                        // 상호명
     private String address;                     // 주소
     private String tel;                         // 전화번호
@@ -29,6 +30,7 @@ public class StoresDto {
     public static StoresDto fromEntity(StoresEntity entity) {
         StoresDto dto = new StoresDto();
         dto.setId(entity.getId());
+        dto.setUserId(entity.getUser().getId());
         dto.setName(entity.getName());
         dto.setAddress(entity.getAddress());
         dto.setTel(entity.getTel());
