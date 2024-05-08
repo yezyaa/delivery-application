@@ -1,5 +1,7 @@
 package com.example.deliveryapplication.users;
 
+import com.example.deliveryapplication.shoppingCart.ShoppingCartEntity;
+import com.example.deliveryapplication.shoppingCart.SpringDataJPAShoppingCartRepository;
 import com.example.deliveryapplication.userAddress.UserAddressService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ import java.util.Optional;
 @Service
 public class UsersService {
     private final SpringDataJPAUsersRepository usersRepository;
-    private final UserAddressService userAddressService;
+    private final SpringDataJPAShoppingCartRepository shoppingCartRepository;
 
     // 회원가입
     public void saveUser(UsersRegistrationDto dto) {
@@ -32,6 +34,13 @@ public class UsersService {
                 .createdAt(LocalDateTime.now())
                 .build();
         usersRepository.save(newUser);
+
+        if ("회원".equals(newUser.getRole())) {
+            ShoppingCartEntity newShoppingCart = ShoppingCartEntity.builder()
+                    .user(newUser)
+                    .build();
+            shoppingCartRepository.save(newShoppingCart);
+        }
     }
 
     // 사용자 전체 조회 (관리자)
