@@ -33,20 +33,20 @@ public class ClosedDaysService {
 
     // 식당별 휴무일 DTO 전체 조회
     public List<ClosedDaysDto> findClosedDaysByStoreId(int storeId) {
-        List<ClosedDaysDto> closedDaysDtoList = new ArrayList<>();
+        List<ClosedDaysDto> closedDaysDto = new ArrayList<>();
         for (ClosedDaysEntity closedDaysEntity : closedDaysRepository.findByStoreId(storeId)) {
-            closedDaysDtoList.add(ClosedDaysDto.fromEntity(closedDaysEntity));
+            closedDaysDto.add(ClosedDaysDto.fromEntity(closedDaysEntity));
         }
-        return closedDaysDtoList;
+        return closedDaysDto;
     }
 
     // 식당별 휴무일 day 필드 전체 조회
     public List<String> findDaysOfClosedDaysByStoreId(int storeId) {
-        List<String> closedDaysList = new ArrayList<>();
+        List<String> closedDays = new ArrayList<>();
         for (ClosedDaysEntity closedDaysEntity : closedDaysRepository.findByStoreId(storeId)) {
-            closedDaysList.add(closedDaysEntity.getDay());
+            closedDays.add(closedDaysEntity.getDay());
         }
-        return closedDaysList;
+        return closedDays;
     }
 
     // 식당별 휴무일 수정
@@ -55,27 +55,27 @@ public class ClosedDaysService {
         if (storesEntity.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "휴무일을 수정할 식당이 없습니다.");
 
-        Optional<ClosedDaysEntity> optionalClosedDaysEntity = closedDaysRepository.findById(id);
-        if (optionalClosedDaysEntity.isEmpty())
+        Optional<ClosedDaysEntity> optionalClosedDays = closedDaysRepository.findById(id);
+        if (optionalClosedDays.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "휴무일을 찾을 수 없습니다.");
 
-        ClosedDaysEntity closedDaysEntity = optionalClosedDaysEntity.get();
+        ClosedDaysEntity closedDaysEntity = optionalClosedDays.get();
         closedDaysEntity.setDay(dto.getDay());
         return ClosedDaysDto.fromEntity(closedDaysRepository.save(closedDaysEntity));
     }
 
     // 식당별 휴무일 전체 삭제
     public void deleteClosedDaysByStoreId(int storeId) {
-        List<ClosedDaysEntity> closedDaysEntityList = closedDaysRepository.findByStoreId(storeId);
-        if (closedDaysEntityList.isEmpty())
+        List<ClosedDaysEntity> closedDaysEntity = closedDaysRepository.findByStoreId(storeId);
+        if (closedDaysEntity.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "휴무일을 찾을 수 없습니다.");
-        closedDaysRepository.deleteAll(closedDaysEntityList);
+        closedDaysRepository.deleteAll(closedDaysEntity);
     }
 
     // 식당별 휴무일 단일 삭제
     public void deleteClosedDayByStoreId(int id) {
-        Optional<ClosedDaysEntity> optionalClosedDaysEntity = closedDaysRepository.findById(id);
-        if (optionalClosedDaysEntity.isEmpty())
+        Optional<ClosedDaysEntity> optionalClosedDays = closedDaysRepository.findById(id);
+        if (optionalClosedDays.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "휴무일을 찾을 수 없습니다.");
 
         closedDaysRepository.deleteById(id);

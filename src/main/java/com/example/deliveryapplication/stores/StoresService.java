@@ -1,6 +1,5 @@
 package com.example.deliveryapplication.stores;
 
-import com.example.deliveryapplication.closedDays.ClosedDaysService;
 import com.example.deliveryapplication.users.SpringDataJPAUsersRepository;
 import com.example.deliveryapplication.users.UsersEntity;
 import lombok.RequiredArgsConstructor;
@@ -47,11 +46,11 @@ public class StoresService {
 
     // 사장별 식당 전체 조회
     public List<StoresDto> findStores(int userId) {
-        List<StoresDto> storesDtoList = new ArrayList<>();
+        List<StoresDto> storesDto = new ArrayList<>();
         for (StoresEntity storesEntity : storesRepository.findByUserId(userId)) {
-            storesDtoList.add(StoresDto.fromEntity(storesEntity));
+            storesDto.add(StoresDto.fromEntity(storesEntity));
         }
-        return storesDtoList;
+        return storesDto;
     }
 
     // 사장별 식당 단일 조회
@@ -59,11 +58,11 @@ public class StoresService {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        Optional<StoresEntity> optionalStoresEntity = storesRepository.findById(id);
-        if (optionalStoresEntity.isEmpty())
+        Optional<StoresEntity> optionalStores = storesRepository.findById(id);
+        if (optionalStores.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "식당을 찾을 수 없습니다.");
 
-        return StoresDto.fromEntity(optionalStoresEntity.get());
+        return StoresDto.fromEntity(optionalStores.get());
     }
 
     // 사장별 특정 식당 수정
@@ -71,11 +70,11 @@ public class StoresService {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        Optional<StoresEntity> optionalStoresEntity = storesRepository.findById(id);
-        if (optionalStoresEntity.isEmpty())
+        Optional<StoresEntity> optionalStores = storesRepository.findById(id);
+        if (optionalStores.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "식당을 찾을 수 없습니다.");
 
-        StoresEntity storesEntity = optionalStoresEntity.get();
+        StoresEntity storesEntity = optionalStores.get();
         storesEntity.setName(dto.getName());
         storesEntity.setAddress(dto.getAddress());
         storesEntity.setTel(dto.getTel());
@@ -93,8 +92,8 @@ public class StoresService {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        Optional<StoresEntity> optionalStoresEntity = storesRepository.findById(id);
-        if (optionalStoresEntity.isEmpty())
+        Optional<StoresEntity> optionalStores = storesRepository.findById(id);
+        if (optionalStores.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "식당을 찾을 수 없습니다.");
         storesRepository.deleteById(id);
     }
