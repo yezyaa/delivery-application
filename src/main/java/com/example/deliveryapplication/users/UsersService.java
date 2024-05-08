@@ -35,46 +35,44 @@ public class UsersService {
     }
 
     // 사용자 전체 조회 (관리자)
-    @Transactional
     public List<UsersDto> findUsers() {
-        List<UsersDto> userDtoList = new ArrayList<>();
+        List<UsersDto> usersDto = new ArrayList<>();
         for (UsersEntity usersEntity : usersRepository.findAll()) {
-            userDtoList.add(UsersDto.fromEntity(usersEntity));
+            usersDto.add(UsersDto.fromEntity(usersEntity));
         }
-        return userDtoList;
+        return usersDto;
     }
 
     // 사용자 단일 조회 (관리자)
-    @Transactional
     public UsersDto findUser(int id) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        if (optionalUsersEntity.isEmpty())
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        if (optionalUsers.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        return UsersDto.fromEntity(optionalUsersEntity.get());
+        return UsersDto.fromEntity(optionalUsers.get());
     }
 
     // 사용자 본인 정보 조회
     public UsersProfileDto findMyProfile(int id) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        if (optionalUsersEntity.isEmpty())
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        if (optionalUsers.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        if (optionalUsersEntity.get().getStatus().equals("탈퇴")) {
+        if (optionalUsers.get().getStatus().equals("탈퇴")) {
             log.info("탈퇴한 사용자입니다. Id = " + id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "탈퇴한 사용자입니다.");
         }
 
-        return UsersProfileDto.fromEntity(optionalUsersEntity.get());
+        return UsersProfileDto.fromEntity(optionalUsers.get());
     }
 
     // 사용자 본인 닉네임 수정
     public UsersProfileDto updateNickname(int id, UsersProfileDto dto) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        if (optionalUsersEntity.isEmpty())
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        if (optionalUsers.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        UsersEntity usersEntity = optionalUsersEntity.get();
+        UsersEntity usersEntity = optionalUsers.get();
         usersEntity.setNickname(dto.getNickname());
         usersEntity.setUpdatedAt(LocalDateTime.now());
         return UsersProfileDto.fromEntity(usersRepository.save(usersEntity));
@@ -82,11 +80,11 @@ public class UsersService {
 
     // 사용자 본인 이메일 수정
     public UsersProfileDto updateEmail(int id, UsersProfileDto dto) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        if (optionalUsersEntity.isEmpty())
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        if (optionalUsers.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        UsersEntity usersEntity = optionalUsersEntity.get();
+        UsersEntity usersEntity = optionalUsers.get();
         usersEntity.setEmail(dto.getEmail());
         usersEntity.setUpdatedAt(LocalDateTime.now());
         return UsersProfileDto.fromEntity(usersRepository.save(usersEntity));
@@ -94,11 +92,11 @@ public class UsersService {
 
     // 사용자 본인 전화번호 수정
     public UsersProfileDto updatePhoneNumber(int id, UsersProfileDto dto) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        if (optionalUsersEntity.isEmpty())
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        if (optionalUsers.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
-        UsersEntity usersEntity = optionalUsersEntity.get();
+        UsersEntity usersEntity = optionalUsers.get();
         usersEntity.setPhoneNumber(dto.getPhoneNumber());
         usersEntity.setUpdatedAt(LocalDateTime.now());
         return UsersProfileDto.fromEntity(usersRepository.save(usersEntity));
@@ -106,12 +104,12 @@ public class UsersService {
 
     // 사용자 본인 비밀번호 수정
     public UsersPasswordDto updatePassword(int id, UsersPasswordDto dto) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        if (optionalUsersEntity.isEmpty())
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        if (optionalUsers.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
 
         // 현재 비밀번호 확인
-        if (!optionalUsersEntity.get().getPassword().equals(dto.getCurrentPassword())) {
+        if (!optionalUsers.get().getPassword().equals(dto.getCurrentPassword())) {
             log.info("현재 비밀번호와 일치하지 않습니다.");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "현재 비밀번호와 일치하지 않습니다.");
         }
@@ -123,7 +121,7 @@ public class UsersService {
         }
 
         // 변경할 비밀번호
-        UsersEntity usersEntity = optionalUsersEntity.get();
+        UsersEntity usersEntity = optionalUsers.get();
         usersEntity.setPassword(dto.getUpdatePassword());
         usersEntity.setUpdatedAt(LocalDateTime.now());
         return UsersPasswordDto.fromEntity(usersRepository.save(usersEntity));
@@ -135,8 +133,8 @@ public class UsersService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
         }
 
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findById(id);
-        UsersEntity usersEntity = optionalUsersEntity.get();
+        Optional<UsersEntity> optionalUsers = usersRepository.findById(id);
+        UsersEntity usersEntity = optionalUsers.get();
         usersEntity.setStatus("탈퇴");
         usersEntity.setUpdatedAt(LocalDateTime.now());
         usersRepository.save(usersEntity);

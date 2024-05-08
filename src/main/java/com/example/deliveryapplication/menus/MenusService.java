@@ -38,26 +38,26 @@ public class MenusService {
 
     // 메뉴 전체 조회
     public List<MenusDto> findMenus() {
-        List<MenusDto> menusDtoList = new ArrayList<>();
+        List<MenusDto> menusDto = new ArrayList<>();
         for (MenusEntity menusEntity : menusRepository.findAll()) {
-            menusDtoList.add(MenusDto.fromEntity(menusEntity));
+            menusDto.add(MenusDto.fromEntity(menusEntity));
         }
-        return menusDtoList;
+        return menusDto;
     }
 
     // 메뉴 단일 조회
     public MenusDto findMenu(int id) {
-        Optional<MenusEntity> optionalMenusEntity = menusRepository.findById(id);
-        if (optionalMenusEntity.isPresent())
-            return MenusDto.fromEntity(optionalMenusEntity.get());
+        Optional<MenusEntity> optionalMenus = menusRepository.findById(id);
+        if (optionalMenus.isPresent())
+            return MenusDto.fromEntity(optionalMenus.get());
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     // 메뉴 수정
     public MenusDto updateMenu(int id, MenusDto dto) {
-        Optional<MenusEntity> optionalMenusEntity = menusRepository.findById(id);
-        if (optionalMenusEntity.isPresent()) {
-            MenusEntity menusEntity = optionalMenusEntity.get();
+        Optional<MenusEntity> optionalMenus = menusRepository.findById(id);
+        if (optionalMenus.isPresent()) {
+            MenusEntity menusEntity = optionalMenus.get();
             menusEntity.setName(dto.getName());
             menusEntity.setPrice(dto.getPrice());
             menusEntity.setDescription(dto.getDescription());

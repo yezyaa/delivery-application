@@ -36,20 +36,20 @@ public class UserAddressService {
 
     // 사용자별 주소 전체 조회
     public List<UserAddressDto> findUserAddressesByUserId(int userId) {
-        List<UserAddressDto> userAddressDtoList = new ArrayList<>();
+        List<UserAddressDto> userAddressesDto = new ArrayList<>();
         for (UserAddressEntity userAddressEntity : userAddressRepository.findByUserId(userId)) {
-            userAddressDtoList.add(UserAddressDto.fromEntity(userAddressEntity));
+            userAddressesDto.add(UserAddressDto.fromEntity(userAddressEntity));
         }
-        return userAddressDtoList;
+        return userAddressesDto;
     }
 
     // 사용자별 주소지 및 주소 필드만 전체 조회
     public List<UserAddressInfoDto> findUserAddressInfoByUserId(int userId) {
-        List<UserAddressInfoDto> userAddressInfoDtoList = new ArrayList<>();
+        List<UserAddressInfoDto> userAddressesInfoDto = new ArrayList<>();
         for (UserAddressEntity userAddressEntity : userAddressRepository.findByUserId(userId)) {
-            userAddressInfoDtoList.add(UserAddressInfoDto.returnAddressInfo(userAddressEntity));
+            userAddressesInfoDto.add(UserAddressInfoDto.returnAddressInfo(userAddressEntity));
         }
-        return userAddressInfoDtoList;
+        return userAddressesInfoDto;
     }
 
     // 사용자별 주소지명 수정
@@ -57,11 +57,11 @@ public class UserAddressService {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        Optional<UserAddressEntity> optionalUserAddressEntity = userAddressRepository.findById(id);
-        if (optionalUserAddressEntity.isEmpty())
+        Optional<UserAddressEntity> optionalUserAddress = userAddressRepository.findById(id);
+        if (optionalUserAddress.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주소를 찾을 수 없습니다.");
 
-        UserAddressEntity userAddressEntity = optionalUserAddressEntity.get();
+        UserAddressEntity userAddressEntity = optionalUserAddress.get();
         userAddressEntity.setName(dto.getName());
         return UserAddressDto.fromEntity(userAddressRepository.save(userAddressEntity));
     }
@@ -71,19 +71,19 @@ public class UserAddressService {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        Optional<UserAddressEntity> optionalUserAddressEntity = userAddressRepository.findById(id);
-        if (optionalUserAddressEntity.isEmpty())
+        Optional<UserAddressEntity> optionalUserAddress = userAddressRepository.findById(id);
+        if (optionalUserAddress.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주소를 찾을 수 없습니다.");
 
-        UserAddressEntity userAddressEntity = optionalUserAddressEntity.get();
+        UserAddressEntity userAddressEntity = optionalUserAddress.get();
         userAddressEntity.setAddress(dto.getAddress());
         return UserAddressDto.fromEntity(userAddressRepository.save(userAddressEntity));
     }
 
     // 사용자별 특정 주소 삭제
     public void deleteUserAddressByUserId(int id) {
-        Optional<UserAddressEntity> optionalUserAddressEntity = userAddressRepository.findById(id);
-        if (optionalUserAddressEntity.isEmpty())
+        Optional<UserAddressEntity> optionalUserAddress = userAddressRepository.findById(id);
+        if (optionalUserAddress.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주소를 찾을 수 없습니다.");
         userAddressRepository.deleteById(id);
     }
