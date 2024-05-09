@@ -1,6 +1,5 @@
 package com.example.deliveryapplication.users;
 
-import com.example.deliveryapplication.orders.OrdersEntity;
 import com.example.deliveryapplication.shoppingCart.ShoppingCartEntity;
 import com.example.deliveryapplication.userAddress.UserAddressEntity;
 import jakarta.persistence.*;
@@ -55,7 +54,4 @@ public class UsersEntity {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ShoppingCartEntity shoppingCart;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrdersEntity> orders = new ArrayList<>();
 }

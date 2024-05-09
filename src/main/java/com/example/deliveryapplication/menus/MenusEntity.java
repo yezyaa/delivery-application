@@ -1,7 +1,6 @@
 package com.example.deliveryapplication.menus;
 
 import com.example.deliveryapplication.cartItems.CartItemsEntity;
-import com.example.deliveryapplication.orderItems.OrderItemsEntity;
 import com.example.deliveryapplication.stores.StoresEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +21,7 @@ public class MenusEntity {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false)
+    @JoinColumn(name = "store_id")
     private StoresEntity store;
 
     @Column(length = 50, nullable = false)
@@ -44,7 +43,4 @@ public class MenusEntity {
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<CartItemsEntity> cartItems = new ArrayList<>();
-
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<OrderItemsEntity> orderItems = new ArrayList<>();
 }

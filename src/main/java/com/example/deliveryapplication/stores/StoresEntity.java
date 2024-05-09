@@ -61,7 +61,4 @@ public class StoresEntity {
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<ClosedDaysEntity> closedDays = new ArrayList<>();
-
-    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<MenusEntity> menus = new ArrayList<>();
 }
