@@ -17,6 +17,7 @@ public class ShoppingCartService {
     private final SpringDataJPAShoppingCartRepository shoppingCartRepository;
     private final SpringDataJPAUsersRepository usersRepository;
 
+    // 회원별 장바구니 조회
     public ShoppingCartDto findShoppingCart(int userId, int id) {
         UsersEntity usersEntity = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
