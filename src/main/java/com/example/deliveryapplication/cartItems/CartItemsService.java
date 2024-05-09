@@ -94,15 +94,4 @@ public class CartItemsService {
 
         cartItemsRepository.deleteAllByShoppingCartId(shoppingCartEntity.getId());
     }
-
-
-
-
-
-
-
-
-
-
-
 }
