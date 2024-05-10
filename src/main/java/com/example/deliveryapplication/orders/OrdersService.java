@@ -9,18 +9,23 @@ import com.example.deliveryapplication.orderItems.SpringDataJPAOrderItemsReposit
 import com.example.deliveryapplication.shoppingCart.ShoppingCartEntity;
 import com.example.deliveryapplication.shoppingCart.SpringDataJPAShoppingCartRepository;
 import com.example.deliveryapplication.stores.SpringDataJPAStoresRepository;
+import com.example.deliveryapplication.stores.StoresDto;
 import com.example.deliveryapplication.stores.StoresEntity;
 import com.example.deliveryapplication.users.SpringDataJPAUsersRepository;
 import com.example.deliveryapplication.users.UsersEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -93,5 +98,45 @@ public class OrdersService {
             orderItemsRepository.save(newOrderItems);
         }
         cartItemsRepository.deleteAllByShoppingCartId(shoppingCartEntity.getId());
+    }
+
+    // 회원별 주문 전체 조회 (주문 내역 조회)
+    public List<OrdersDto> findOrdersByUserId(int userId) {
+        UsersEntity usersEntity = usersRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+
+        List<OrdersDto> ordersDto = new ArrayList<>();
+        for (OrdersEntity ordersEntity : ordersRepository.findByUserId(userId)) {
+            ordersDto.add(OrdersDto.fromEntity(ordersEntity));
+        }
+        return ordersDto;
+    }
+
+    // 회원별 주문 단일 조회
+    public OrdersDto findOrderByUserId(int userId, int id) {
+        UsersEntity usersEntity = usersRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+
+        OrdersEntity ordersEntity = ordersRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."));
+
+        if (ordersEntity.getUser().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "주문 정보에 접근할 권한이 없습니다.");
+        }
+
+        return OrdersDto.fromEntity(ordersEntity);
+    }
+
+    // 회원별 주문 취소
+    public void deleteOrderByUserId(int userId, int id) {
+        UsersEntity usersEntity = usersRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+
+        OrdersEntity ordersEntity = ordersRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."));
+
+        if (!ordersEntity.getOrderStatus().equals("대기"))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "주문 상태가 변경되었습니다.");
+        ordersRepository.deleteById(id);
     }
 }

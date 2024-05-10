@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,4 +21,21 @@ public class OrdersDto {
     private String deliveryStatus;              // 배달상태
     private LocalDateTime createdAt;            // 생성일시
     private LocalDateTime updatedAt;            // 수정일시
+
+    public static OrdersDto fromEntity(OrdersEntity entity) {
+        OrdersDto dto = new OrdersDto();
+        dto.setId(entity.getId());
+        dto.setUserId(entity.getUser().getId());
+        dto.setOrderItems(entity.getOrderItems().stream()
+                .map(OrderItemsDto::fromEntity)
+                .collect(Collectors.toList()));
+        dto.setDeliveryRequests(entity.getDeliveryRequests());
+        dto.setPaymentMethod(entity.getPaymentMethod());
+        dto.setTotalAmount(entity.getTotalAmount());
+        dto.setOrderStatus(entity.getOrderStatus());
+        dto.setDeliveryStatus(entity.getDeliveryStatus());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
+        return dto;
+    }
 }
