@@ -1,12 +1,10 @@
 package com.example.deliveryapplication.orders;
 
 import com.example.deliveryapplication.orderItems.OrderItemsEntity;
+import com.example.deliveryapplication.stores.StoresEntity;
 import com.example.deliveryapplication.users.UsersEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +26,10 @@ public class OrdersEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UsersEntity user;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id", nullable = false)
+    private StoresEntity store;
+
     @Column(name = "delivery_requests")
     private String deliveryRequests;
 
@@ -39,6 +42,10 @@ public class OrdersEntity {
     @Builder.Default
     @Column(name = "order_status", length = 10, nullable = false)
     private String orderStatus = "대기";
+
+    @Builder.Default
+    @Column(name = "pickup_status", length = 10, nullable = false)
+    private String pickupStatus = "대기";
 
     @Column(name = "delivery_status", length = 10)
     private String deliveryStatus;
