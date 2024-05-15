@@ -2,6 +2,7 @@ package com.example.deliveryapplication.stores;
 
 import com.example.deliveryapplication.closedDays.ClosedDaysEntity;
 import com.example.deliveryapplication.menus.MenusEntity;
+import com.example.deliveryapplication.orders.OrdersEntity;
 import com.example.deliveryapplication.userAddress.UserAddressEntity;
 import com.example.deliveryapplication.users.UsersEntity;
 import jakarta.persistence.*;
@@ -64,4 +65,7 @@ public class StoresEntity {
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MenusEntity> menus = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<OrdersEntity> orders = new ArrayList<>();
 }
